@@ -62,9 +62,18 @@ function toDetail(resource, user) {
 export async function listResources(params = {}) {
   await delay()
 
-  // برای تست حالت «خطای سرور» در صفحه فهرست: در جست‌وجو بنویسید __error__
+  // برای تست حالت‌های خطا در صفحه فهرست، در کادر جست‌وجو یکی از این‌ها را بنویسید:
+  //   __error__      خطای سرور (500)
+  //   __forbidden__  نبود مجوز (403)
+  //   __offline__    قطع ارتباط با سرور
   if (params.search === '__error__') {
     throw apiError(500, { code: 'server_error', message: 'خطای داخلی سرور.' })
+  }
+  if (params.search === '__forbidden__') {
+    throw apiError(403, { code: 'forbidden', message: 'شما اجازه دیدن این فهرست را ندارید.' })
+  }
+  if (params.search === '__offline__') {
+    throw new Error('Network Error')
   }
 
   const user = currentUser()
