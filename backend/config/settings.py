@@ -30,6 +30,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    "rest_framework",
+    "corsheaders",
+
+    "users",
+    "library",
     "rest_framework_simplejwt.token_blacklist",
 ]
 
@@ -62,6 +68,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+AUTH_USER_MODEL = "users.User"
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
