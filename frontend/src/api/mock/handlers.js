@@ -4,7 +4,9 @@ import { authors, categories, resources, users } from './data.js'
 
 // ───────── ابزارها ─────────
 
-const delay = (ms = 400) => new Promise((resolve) => setTimeout(resolve, ms))
+// در تست‌ها تأخیر صفر است تا سریع اجرا شوند
+const delay = (ms = 400) =>
+  new Promise((resolve) => setTimeout(resolve, import.meta.env.MODE === 'test' ? 0 : ms))
 
 // خطایی با همان شکل خطای axios می‌سازد تا parseApiError بدون تفاوت کار کند.
 function apiError(status, body) {
@@ -43,7 +45,7 @@ function toListItem(resource, user) {
     publication_year: resource.publication_year,
     calendar: resource.calendar,
     language: resource.language,
-    category: resource.category,
+    categories: resource.categories,
     file_type: resource.file_type,
     status: resource.status,
     access_policy: resource.access_policy,
@@ -83,7 +85,7 @@ export async function listResources(params = {}) {
 
   const filtered = resources.filter((r) => {
     if (!isStaff(user) && r.status !== 'published') return false
-    if (params.category && String(r.category.id) !== String(params.category)) return false
+    if (params.category && !r.categories.some((c) => String(c.id) === String(params.category))) return false
     if (params.language && r.language !== params.language) return false
     if (params.file_type && r.file_type !== params.file_type) return false
     if (query) {

@@ -5,7 +5,7 @@ import { ACCESS_LABELS, CALENDAR_LABELS, FILE_TYPE_LABELS, LANGUAGE_LABELS, STAT
 import './resource-list.css'
 
 export default function ResourceCard({ resource }) {
-  const { id, title, authors, publication_year: year, calendar, language, category, file_type: fileType, status, access_status: access } =
+  const { id, title, authors, publication_year: year, calendar, language, categories, file_type: fileType, status, access_status: access } =
     resource
 
   return (
@@ -27,7 +27,7 @@ export default function ResourceCard({ resource }) {
 
       <ul className="resource-card__meta">
         <li>{year ? `${faNumber(year)} (${label(CALENDAR_LABELS, calendar)})` : 'سال نامشخص'}</li>
-        {category && <li>{category.name}</li>}
+        {categories.length > 0 && <li>{categories.map((category) => category.name).join('، ')}</li>}
         <li>{label(LANGUAGE_LABELS, language)}</li>
       </ul>
 

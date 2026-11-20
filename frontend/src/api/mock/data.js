@@ -28,23 +28,23 @@ const authorsByIds = (ids) => ids.map((id) => authors.find((a) => a.id === id))
 
 // access_policy: public = همه، members = فقط اعضای واردشده، restricted = فقط کتابدار/مدیر
 const base = [
-  ['تاریخ معاصر ایران', 2, [1], 1395, 'shamsi', 'fa', 'pdf', 'public'],
-  ['مبانی مهندسی نرم‌افزار', 3, [2, 3], 1400, 'shamsi', 'fa', 'pdf', 'public'],
-  ['فلسفه علم برای همه', 4, [4], 1398, 'shamsi', 'fa', 'epub', 'public'],
-  ['پایگاه داده‌ها: از صفر تا صد', 3, [3], 1401, 'shamsi', 'fa', 'pdf', 'members'],
-  ['شعر و جامعه در قرن بیستم', 1, [5], 1392, 'shamsi', 'fa', 'epub', 'public'],
-  ['Software Engineering Fundamentals', 3, [6], 2019, 'gregorian', 'en', 'pdf', 'public'],
-  ['ریاضیات گسسته', 5, [2], 1399, 'shamsi', 'fa', 'pdf', 'members'],
-  ['سفرنامه‌های دوره قاجار', 2, [1, 4], 1385, 'shamsi', 'fa', 'pdf', 'public'],
-  ['Learning React Step by Step', 3, [6], 2022, 'gregorian', 'en', 'epub', 'public'],
-  ['مقدمه‌ای بر منطق', 4, [5], 1394, 'shamsi', 'fa', 'pdf', 'restricted'],
-  ['فیزیک عمومی ۱', 5, [3, 4], 1397, 'shamsi', 'fa', 'pdf', 'public'],
-  ['نقد ادبی معاصر', 1, [1], 1396, 'shamsi', 'fa', 'epub', 'members'],
-  ['شبکه‌های کامپیوتری', 3, [2], 1402, 'shamsi', 'fa', 'pdf', 'public'],
+  ['تاریخ معاصر ایران', [2], [1], 1395, 'shamsi', 'fa', 'pdf', 'public'],
+  ['مبانی مهندسی نرم‌افزار', [3], [2, 3], 1400, 'shamsi', 'fa', 'pdf', 'public'],
+  ['فلسفه علم برای همه', [4, 5], [4], 1398, 'shamsi', 'fa', 'epub', 'public'],
+  ['پایگاه داده‌ها: از صفر تا صد', [3], [3], 1401, 'shamsi', 'fa', 'pdf', 'members'],
+  ['شعر و جامعه در قرن بیستم', [1], [5], 1392, 'shamsi', 'fa', 'epub', 'public'],
+  ['Software Engineering Fundamentals', [3], [6], 2019, 'gregorian', 'en', 'pdf', 'public'],
+  ['ریاضیات گسسته', [5, 3], [2], 1399, 'shamsi', 'fa', 'pdf', 'members'],
+  ['سفرنامه‌های دوره قاجار', [2], [1, 4], 1385, 'shamsi', 'fa', 'pdf', 'public'],
+  ['Learning React Step by Step', [3], [6], 2022, 'gregorian', 'en', 'epub', 'public'],
+  ['مقدمه‌ای بر منطق', [4], [5], 1394, 'shamsi', 'fa', 'pdf', 'restricted'],
+  ['فیزیک عمومی ۱', [5], [3, 4], 1397, 'shamsi', 'fa', 'pdf', 'public'],
+  ['نقد ادبی معاصر', [1], [1], 1396, 'shamsi', 'fa', 'epub', 'members'],
+  ['شبکه‌های کامپیوتری', [3], [2], 1402, 'shamsi', 'fa', 'pdf', 'public'],
 ]
 
 function build(index) {
-  const [title, cat, authorIds, year, calendar, language, fileType, policy] = base[index % base.length]
+  const [title, categoryIds, authorIds, year, calendar, language, fileType, policy] = base[index % base.length]
   const round = Math.floor(index / base.length)
   const n = index + 1
   const status = n === 9 || n === 18 ? 'draft' : n === 23 ? 'archived' : 'published'
@@ -57,7 +57,7 @@ function build(index) {
     publication_year: year + round,
     calendar,
     language,
-    category: catById(cat),
+    categories: categoryIds.map(catById),
     keywords: 'کلیدواژه، نمونه',
     description: 'خلاصه‌ای از محتوای این منبع. این متن ساختگی است.',
     isbn: '',
