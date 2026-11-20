@@ -58,3 +58,16 @@ export function parseApiError(error) {
     data,
   }
 }
+
+/**
+ * پیام بالای فرم (خطای کلی). خطای فیلدها کنار خود فیلد نمایش داده می‌شود، نه اینجا.
+ * اگر چیزی برای نمایش بالای فرم نباشد، رشته خالی برمی‌گرداند.
+ */
+export function formMessage(error) {
+  if (error.formErrors.length > 0) return error.formErrors.join(' ')
+  if (error.code === 'throttled' && error.retryAfter) {
+    return `تعداد تلاش‌ها زیاد است. ${error.retryAfter.toLocaleString('fa-IR')} ثانیه دیگر دوباره تلاش کنید.`
+  }
+  if (Object.keys(error.fieldErrors).length > 0) return ''
+  return error.message
+}

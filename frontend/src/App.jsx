@@ -1,8 +1,8 @@
-import { Route, Routes } from "react-router-dom";
-import Layout from "./components/Layout";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import ResourceList from "./pages/ResourceList";
+import { Route, Routes } from 'react-router-dom'
+import Layout from './components/Layout'
+import Login from './pages/Login'
+import Register from './pages/Register'
+import ResourceList from './pages/ResourceList'
 
 export default function App() {
   return (
@@ -13,5 +13,5 @@ export default function App() {
         <Route path="register" element={<Register />} />
       </Route>
     </Routes>
-  );
+  )
 }

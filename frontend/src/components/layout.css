@@ -1,0 +1,24 @@
+.header__user {
+  color: var(--text-muted, #6b6a75);
+}
+
+.header__logout {
+  padding: 6px 14px;
+  font: inherit;
+  color: var(--primary, #2f4a8a);
+  background: none;
+  border: 0;
+  border-radius: var(--radius, 10px);
+  cursor: pointer;
+  transition: background-color 150ms ease-out;
+}
+
+.header__logout:hover {
+  background: var(--bg, #f7f6f2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header__logout {
+    transition: none;
+  }
+}
