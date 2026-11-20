@@ -46,9 +46,7 @@ class Resource(models.Model):
         max_length=10, choices=Calendar.choices, blank=True
     )
     language = models.CharField(max_length=10, blank=True)
-    category = models.ForeignKey(
-        Category, null=True, blank=True, on_delete=models.SET_NULL, related_name="resources"
-    )
+    categories = models.ManyToManyField(Category, blank=True, related_name="resources")
     keywords = models.CharField(max_length=500, blank=True)
     description = models.TextField(blank=True)
     isbn = models.CharField(max_length=20, blank=True)
@@ -74,22 +72,24 @@ class Resource(models.Model):
     def __str__(self):
         return self.title
 
-
 class ResourceFile(models.Model):
-    class FileType(models.TextChoices):
-        PDF = "pdf", "PDF"
-        EPUB = "epub", "EPUB"
-
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name="files")
+    file_type = models.CharField(max_length=10, choices=[("pdf", "PDF"), ("epub", "EPUB")])
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.resource_id} ({self.file_type})"
+
+
+class FileVersion(models.Model):
+    file = models.ForeignKey(ResourceFile, on_delete=models.CASCADE, related_name="versions")
     stored_path = models.CharField(max_length=500)
     original_name = models.CharField(max_length=255)
-    file_type = models.CharField(max_length=10, choices=FileType.choices)
     size = models.PositiveBigIntegerField()
     sha256 = models.CharField(max_length=64, db_index=True)
     is_current = models.BooleanField(default=True)
-
     uploaded_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name="uploaded_files"
+        settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name="uploaded_versions"
     )
     uploaded_at = models.DateTimeField(auto_now_add=True)
 

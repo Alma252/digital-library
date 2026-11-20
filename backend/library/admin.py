@@ -1,7 +1,8 @@
 from django.contrib import admin
-from .models import Author, Category, Resource, ResourceFile
+from .models import Author, Category, Resource, ResourceFile, FileVersion
 
 admin.site.register(Author)
 admin.site.register(Category)
 admin.site.register(Resource)
 admin.site.register(ResourceFile)
+admin.site.register(FileVersion)
