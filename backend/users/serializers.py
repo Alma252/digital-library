@@ -10,6 +10,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ["id", "username", "email", "password", "role"]
         read_only_fields = ["id", "role"]
+        extra_kwargs = {"username": {"min_length": 3}}
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)  # نقش همیشه user است

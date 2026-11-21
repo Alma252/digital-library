@@ -26,3 +26,10 @@ class AuthTests(APITestCase):
 
     def test_me_requires_auth(self):
         self.assertEqual(self.client.get("/api/auth/me/").status_code, 401)
+
+    def test_register_short_username(self):
+        r = self.client.post("/api/auth/register/", {
+            "username": "ab", "email": "a@example.com",
+            "password": "Str0ng-Pass-123"})
+        self.assertEqual(r.status_code, 400)
+        self.assertIn("username", r.data["errors"])
