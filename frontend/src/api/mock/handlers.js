@@ -123,6 +123,13 @@ export async function listResources(params = {}) {
 
 export async function getResource(id) {
   await delay(300)
+
+  // برای تست حالت‌های خطا در صفحه جزئیات، این‌ها را در آدرس بنویسید:
+  //   /resources/__error__   /resources/__forbidden__   /resources/__offline__
+  if (id === '__error__') throw apiError(500, { code: 'server_error', message: 'خطای داخلی سرور.' })
+  if (id === '__forbidden__') throw apiError(403, { code: 'forbidden', message: 'مجوز ندارید.' })
+  if (id === '__offline__') throw new Error('Network Error')
+
   const user = currentUser()
   const resource = resources.find((r) => r.id === id)
   if (!resource || (!isStaff(user) && resource.status !== 'published')) {
