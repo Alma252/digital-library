@@ -1,0 +1,175 @@
+/* مقدار بعد از کاما، جایگزین وقتی است که متغیرهای تم (index.css) تعریف نشده باشند. */
+
+.page-status {
+  padding: 24px 0;
+  color: var(--text-muted, #6b6a75);
+}
+
+/* ───── فیلد ───── */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-block-end: 16px;
+}
+
+.field__label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.field__required {
+  color: var(--danger, #b3261e);
+}
+
+.field__control {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.field__input {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 12px;
+  font: inherit;
+  color: inherit;
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #c9c7bd);
+  border-radius: var(--radius, 10px);
+  transition: border-color 150ms ease-out;
+}
+
+.field__input:focus-visible {
+  outline: 2px solid var(--primary, #2f4a8a);
+  outline-offset: 1px;
+}
+
+.field--error .field__input {
+  border-color: var(--danger, #b3261e);
+}
+
+.field__toggle {
+  min-width: 64px;
+  padding: 0 12px;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--primary, #2f4a8a);
+  background: transparent;
+  border: 1px solid var(--border, #c9c7bd);
+  border-radius: var(--radius, 10px);
+  cursor: pointer;
+}
+
+.field__hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted, #6b6a75);
+}
+
+/* خطا فقط با رنگ نمایش داده نمی‌شود: علامت «!» و متن هم دارد (UX-06) */
+.field__error {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--danger, #b3261e);
+}
+
+.field__error::before {
+  content: '!';
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 1.2em;
+  height: 1.2em;
+  font-size: 0.75em;
+  font-weight: 700;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+}
+
+/* ───── صفحه ورود و ثبت‌نام ───── */
+
+.auth {
+  max-width: 420px;
+  margin: 24px auto;
+  padding: 24px;
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #e4e2da);
+  border-radius: var(--radius, 10px);
+}
+
+.auth h1 {
+  margin: 0 0 4px;
+}
+
+.auth__note {
+  margin: 0 0 20px;
+  font-size: 0.85rem;
+  color: var(--text-muted, #6b6a75);
+}
+
+.auth__alt {
+  margin: 20px 0 0;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.form-alert {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  color: var(--danger, #b3261e);
+  background: color-mix(in srgb, var(--danger, #b3261e) 8%, transparent);
+  border: 1px solid var(--danger, #b3261e);
+  border-radius: var(--radius, 10px);
+}
+
+.form-alert--success {
+  color: inherit;
+  background: color-mix(in srgb, #2e7d32 10%, transparent);
+  border-color: #2e7d32;
+}
+
+.btn-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 44px;
+  margin-block-start: 8px;
+  padding: 0 20px;
+  font: inherit;
+  font-weight: 600;
+  color: var(--on-primary, #fff);
+  background: var(--primary, #2f4a8a);
+  border: 0;
+  border-radius: var(--radius, 10px);
+  cursor: pointer;
+  transition: background-color 150ms ease-out, transform 100ms ease-out;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background: var(--primary-hover, #243a70);
+}
+
+.btn-submit:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.btn-submit:disabled {
+  opacity: 0.65;
+  cursor: progress;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-submit,
+  .field__input {
+    transition: none;
+  }
+}
