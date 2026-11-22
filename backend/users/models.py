@@ -11,6 +11,10 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.USER)
 
+    @property
+    def effective_role(self):
+        return "admin" if self.is_superuser else self.role
+
     # وضعیت حساب با فیلد is_active خود جنگو مدیریت می‌شود
 
     def __str__(self):

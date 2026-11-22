@@ -9,6 +9,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 
 from .serializers import (ChangePasswordSerializer, LoginSerializer, MeSerializer, RegisterSerializer)
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError as DjangoValidationError
 
 
 class RegisterView(APIView):
@@ -38,7 +40,7 @@ class LoginView(APIView):
         return Response({
             "access": str(refresh.access_token),
             "refresh": str(refresh),
-            "user": {"id": user.id, "username": user.username, "role": user.role},
+            "user": {"id": user.id, "username": user.username, "role": user.effective_role},
         })
 
 
@@ -47,9 +49,13 @@ class LogoutView(APIView):
 
     def post(self, request):
         try:
-            RefreshToken(request.data.get("refresh", "")).blacklist()
+            token = RefreshToken(request.data.get("refresh", ""))
         except TokenError:
             raise serializers.ValidationError({"refresh": ["توکن نامعتبر است."]})
+        if str(token["user_id"]) != str(request.user.pk):
+            # پیام عمداً مثل حالت نامعتبر است تا اطلاعاتی درباره توکن دیگران فاش نشود
+            raise serializers.ValidationError({"refresh": ["توکن نامعتبر است."]})
+        token.blacklist()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -62,6 +68,11 @@ class ChangePasswordView(APIView):
         user = request.user
         if not user.check_password(s.validated_data["old_password"]):
             raise serializers.ValidationError({"old_password": ["رمز فعلی اشتباه است."]})
+        try:
+            validate_password(s.validated_data["new_password"], user=user)
+        except DjangoValidationError as e:
+            raise serializers.ValidationError({"new_password": list(e.messages)})
+
         user.set_password(s.validated_data["new_password"])
         user.save()
         # باطل‌کردن همه نشست‌های قبلی بعد از تغییر رمز

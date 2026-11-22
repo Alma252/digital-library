@@ -4,7 +4,7 @@ from rest_framework.permissions import BasePermission
 def _role(user):
     if not user.is_authenticated:
         return None
-    return "admin" if user.is_superuser else user.role
+    return user.effective_role
 
 
 class IsAdmin(BasePermission):
