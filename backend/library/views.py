@@ -5,7 +5,7 @@ from rest_framework.exceptions import ValidationError
 from users.models import User
 
 from .models import Resource
-from .serializers import ResourceListSerializer
+from .serializers import ResourceListSerializer ,  ResourceDetailSerializer
 
 
 class ResourcePagination(PageNumberPagination):
@@ -14,7 +14,8 @@ class ResourcePagination(PageNumberPagination):
     max_page_size = 50
 
 
-class ResourceViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class ResourceViewSet(mixins.ListModelMixin,mixins.RetrieveModelMixin,viewsets.GenericViewSet,
+):
     serializer_class = ResourceListSerializer
     pagination_class = ResourcePagination
     filter_backends = [filters.SearchFilter]
@@ -48,3 +49,10 @@ class ResourceViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         if file_type:
             queryset = queryset.filter(files__file_type=file_type).distinct()
         return queryset
+
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return ResourceDetailSerializer
+        return ResourceListSerializer
+

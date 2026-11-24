@@ -156,3 +156,42 @@ class ResourceListTests(APITestCase):
 
         all_results = first_page.data["results"] + second_page.data["results"]
         self.assertCountEqual([item["id"] for item in all_results], expected_ids)
+
+    def test_guest_can_retrieve_published_resource_detail(self):
+        book = Resource.objects.create(
+            title="تاریخ ایران",
+            publisher="انتشارات نمونه",
+            description="توضیح کتاب",
+            status=Resource.Status.PUBLISHED,
+            access_policy=Resource.AccessPolicy.PUBLIC,
+        )
+
+        response = self.client.get(
+            reverse("resource-detail", kwargs={"pk": str(book.pk)})
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["id"], str(book.pk))
+        self.assertEqual(response.data["title"], "تاریخ ایران")
+        self.assertEqual(response.data["publisher"], "انتشارات نمونه")
+        self.assertEqual(response.data["description"], "توضیح کتاب")
+
+    def test_guest_cannot_retrieve_draft_or_deleted_resource(self):
+        draft = Resource.objects.create(
+            title="پیش‌نویس",
+            status=Resource.Status.DRAFT,
+            access_policy=Resource.AccessPolicy.PUBLIC,
+        )
+        deleted = Resource.objects.create(
+            title="منبع حذف‌شده",
+            status=Resource.Status.PUBLISHED,
+            access_policy=Resource.AccessPolicy.PUBLIC,
+            is_deleted=True,
+        )
+
+        for book in (draft, deleted):
+            with self.subTest(book=book.title):
+                response = self.client.get(
+                    reverse("resource-detail", kwargs={"pk": str(book.pk)})
+                )
+                self.assertEqual(response.status_code, 404)
