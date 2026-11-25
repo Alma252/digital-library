@@ -1,17 +1,20 @@
 import { Fragment } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { faNumber } from '../utils/format.js'
 import { ACCESS_LABELS, CALENDAR_LABELS, FILE_TYPE_LABELS, LANGUAGE_LABELS, STATUS_LABELS, label } from '../utils/labels.js'
 import './resource-list.css'
 
 export default function ResourceCard({ resource }) {
+  const location = useLocation()
   const { id, title, authors, publication_year: year, calendar, language, categories, file_type: fileType, status, access_status: access } =
     resource
 
   return (
     <li className="resource-card">
       <h2 className="resource-card__title" dir="auto">
-        <Link to={`/resources/${id}`}>{title}</Link>
+        <Link to={`/resources/${id}`} state={{ listSearch: location.search }}>
+          {title}
+        </Link>
       </h2>
 
       <p className="resource-card__authors">
