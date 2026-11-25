@@ -1,16 +1,42 @@
-# React + Vite
+# Frontend — کتابخانه دیجیتال
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+رابط کاربری فارسی (راست‌به‌چپ) با React 19 و Vite.
+راهنمای کامل نصب و اجرای کل پروژه در [README اصلی](../README.md) است.
 
-Currently, two official plugins are available:
+## پیش‌نیازها
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Node.js ‎^22.22.2 یا ‎^24.15.0
+- npm ۱۰ یا بالاتر
 
-## React Compiler
+## شروع سریع
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+cp .env.example .env
+npm run dev
+```
 
-## Expanding the Oxlint configuration
+| دستور | کار |
+|---|---|
+| `npm run dev` | اجرای محیط توسعه |
+| `npm test` | اجرای تست‌ها (Vitest) |
+| `npm run lint` | بررسی کد (oxlint) |
+| `npm run build` | ساخت نسخهٔ تولید |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## متغیرهای محیطی
+
+| متغیر | شرح | پیش‌فرض |
+|---|---|---|
+| `VITE_API_URL` | آدرس پایهٔ API | `/api` |
+| `VITE_USE_MOCK` | `true` برای داده ساختگی، `false` برای Backend واقعی | `true` |
+
+## ساختار `src/`
+
+| پوشه | محتوا |
+|---|---|
+| `api/` | درخواست‌ها به سرور و mock (فقط این پوشه mock را می‌شناسد) |
+| `context/` | وضعیت احراز هویت |
+| `pages/` | صفحه‌ها (ورود، ثبت‌نام، فهرست، جزئیات) |
+| `components/` | اجزای مشترک |
+| `hooks/` | هوک‌ها |
+| `utils/` | ابزارها (قالب‌بندی، خطاها، برچسب‌ها) |
