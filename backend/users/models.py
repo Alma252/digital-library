@@ -12,6 +12,11 @@ class User(AbstractUser):
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.USER)
 
     # وضعیت حساب با فیلد is_active خود جنگو مدیریت می‌شود
-
+    @property
+    def effective_role(self):
+        if self.is_superuser:
+            return self.Role.ADMIN
+        return self.role
     def __str__(self):
+
         return self.username

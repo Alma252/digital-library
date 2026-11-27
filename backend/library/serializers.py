@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from . import access
 from .models import Author, Category, FileVersion, Resource
 
 class AuthorSerializer(serializers.ModelSerializer):
@@ -19,6 +19,7 @@ class ResourceListSerializer(serializers.ModelSerializer):
     authors = AuthorSerializer(many=True, read_only=True)
     categories = CategorySerializer(many=True, read_only=True)
     file_type = serializers.SerializerMethodField()
+    access_status = serializers.SerializerMethodField()
 
     class Meta:
         model = Resource
@@ -31,6 +32,7 @@ class ResourceListSerializer(serializers.ModelSerializer):
             "language",
             "categories",
             "file_type",
+            "access_status",
             "status",
             "access_policy",
         ]
@@ -43,17 +45,47 @@ class ResourceListSerializer(serializers.ModelSerializer):
             .values_list("file__file_type", flat=True)
             .first()
         )
-
+    def get_access_status(self, resource):
+        user = self.context["request"].user
+        permissions = access.get_permissions(user, resource)
+        return access.get_access_status(permissions)
 
 
 class ResourceDetailSerializer(ResourceListSerializer):
+    permissions = serializers.SerializerMethodField()
+    files = serializers.SerializerMethodField()
     class Meta(ResourceListSerializer.Meta):
         fields = ResourceListSerializer.Meta.fields + [
             "publisher",
             "description",
             "keywords",
             "isbn",
-            "cover_image",
+            "permissions",
+            "files",
+            "created_at",
+            "updated_at",
+        ]
+    def get_permissions(self, resource):
+        user = self.context["request"].user
+        return access.get_permissions(user, resource)
+
+    def get_files(self, resource):
+        versions = (
+            FileVersion.objects
+            .filter(file__resource=resource, is_current=True)
+            .select_related("file")
+            .order_by("file_id")
+        )
+
+        return [
+            {
+                "id": version.file_id,
+                "original_name": version.original_name,
+                "file_type": version.file.file_type,
+                "size": version.size,
+                "processing_status": "ready",
+            }
+            for version in versions
         ]
 
 
